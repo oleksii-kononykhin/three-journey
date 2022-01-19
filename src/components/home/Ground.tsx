@@ -1,6 +1,6 @@
-import { useTexture } from "@react-three/drei";
-import { useLayoutEffect } from "react";
-import { Float32BufferAttribute, PlaneGeometry, RepeatWrapping } from "three";
+import { Suspense } from "react";
+import { Float32BufferAttribute, PlaneGeometry } from "three";
+import { GrassMaterial } from "./GrassMaterial";
 
 const doorGeometry = new PlaneGeometry(20, 20);
 doorGeometry.setAttribute(
@@ -9,21 +9,6 @@ doorGeometry.setAttribute(
 );
 
 export function Ground() {
-  const textures = useTexture({
-    map: "/textures/grass/color.jpg",
-    aoMap: "/textures/grass/ambientOcclusion.jpg",
-    normalMap: "/textures/grass/normal.jpg",
-    roughnessMap: "/textures/grass/roughness.jpg",
-  });
-
-  useLayoutEffect(() => {
-    Object.values(textures).forEach((texture) => {
-      texture.repeat.set(8, 8);
-      texture.wrapS = RepeatWrapping;
-      texture.wrapT = RepeatWrapping;
-    });
-  }, [textures]);
-
   return (
     <mesh
       name="ground"
@@ -31,7 +16,9 @@ export function Ground() {
       rotation-x={-Math.PI / 2}
       receiveShadow
     >
-      <meshStandardMaterial {...textures} />
+      <Suspense fallback={<meshStandardMaterial color={0xa9c388} />}>
+        <GrassMaterial />
+      </Suspense>
     </mesh>
   );
 }

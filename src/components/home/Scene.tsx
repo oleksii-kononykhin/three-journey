@@ -1,6 +1,6 @@
 import { useThree } from "@react-three/fiber";
 import { useLayoutEffect, useMemo } from "react";
-import { Fog } from "three";
+import { Color, Fog } from "three";
 import { Bush } from "./Bush";
 import { Ghost } from "./Ghost";
 import { Grave } from "./Grave";
@@ -9,6 +9,8 @@ import { House } from "./House";
 import { Lights } from "./Lights";
 
 export function HouseScene() {
+  console.log("scene");
+
   const camera = useThree((state) => state.camera);
   const scene = useThree((state) => state.scene);
 
@@ -22,10 +24,11 @@ export function HouseScene() {
 
   useLayoutEffect(() => {
     scene.fog = new Fog(0x262837, 2, 15);
+    scene.background = new Color(0x262837);
   }, [scene]);
 
-  const graves = useMemo(
-    () => (
+  const graves = useMemo(() => {
+    return (
       <group name="graves">
         {[...Array(50)].map((_, index) => {
           const angle = Math.random() * Math.PI * 2;
@@ -46,9 +49,8 @@ export function HouseScene() {
           );
         })}
       </group>
-    ),
-    []
-  );
+    );
+  }, []);
 
   return (
     <>

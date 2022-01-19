@@ -1,6 +1,6 @@
-import { Loader, OrbitControls, Stats } from "@react-three/drei";
+import { OrbitControls, Stats } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { HouseScene } from "./components/home/Scene";
 
 import { initDevtools } from "./utils";
@@ -37,14 +37,10 @@ function App() {
         shadows
       >
         <OrbitControls />
-        <Suspense fallback={null}>
-          <HouseScene />
-        </Suspense>
-        <color attach="background" args={[0x262837]} />
+        <HouseScene />
         <Stats />
         {/* <axesHelper args={[3]} /> */}
       </Canvas>
-      <Loader />
     </div>
   );
 }

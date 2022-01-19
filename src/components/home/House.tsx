@@ -1,5 +1,8 @@
 import { useTexture } from "@react-three/drei";
+import { Suspense } from "react";
 import { BoxGeometry, Float32BufferAttribute, PlaneGeometry } from "three";
+import { DoorMaterial } from "./DoorMaterial";
+import { WallsMaterial } from "./WallsMaterial";
 
 const width = 4;
 const wallsHeight = 2.5;
@@ -20,23 +23,6 @@ wallsGeometry.setAttribute(
 );
 
 export function House() {
-  const doorTextures = useTexture({
-    map: "/textures/door/color.jpg",
-    alphaMap: "/textures/door/alpha.jpg",
-    aoMap: "/textures/door/ambientOcclusion.jpg",
-    displacementMap: "/textures/door/height.jpg",
-    normalMap: "/textures/door/normal.jpg",
-    metalnessMap: "/textures/door/metalness.jpg",
-    roughnessMap: "/textures/door/roughness.jpg",
-  });
-
-  const bricksTextures = useTexture({
-    map: "/textures/bricks/color.jpg",
-    aoMap: "/textures/bricks/ambientOcclusion.jpg",
-    normalMap: "/textures/bricks/normal.jpg",
-    roughnessMap: "/textures/bricks/roughness.jpg",
-  });
-
   return (
     <group name="house">
       <mesh
@@ -45,7 +31,9 @@ export function House() {
         position-y={wallsHeight / 2}
         castShadow
       >
-        <meshStandardMaterial {...bricksTextures} />
+        <Suspense fallback={<meshStandardMaterial color={0xac8e82} />}>
+          <WallsMaterial />
+        </Suspense>
       </mesh>
       <mesh
         name="roof"
@@ -61,11 +49,9 @@ export function House() {
         geometry={doorGeometry}
         position={[0, doorHeight / 2 - 0.1, width / 2 + 0.01]}
       >
-        <meshStandardMaterial
-          {...doorTextures}
-          transparent
-          displacementScale={0.1}
-        />
+        <Suspense fallback={<meshStandardMaterial color={0xaa7b7b} />}>
+          <DoorMaterial />
+        </Suspense>
       </mesh>
       <pointLight
         color={0xff7d46}

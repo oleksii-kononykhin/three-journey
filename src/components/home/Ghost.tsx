@@ -18,7 +18,6 @@ export function Ghost({
   offset = 0,
   ...props
 }: GhostProps) {
-  console.log("ghost");
   const ref = useRef<PointLight>(null!);
 
   useFrame((state) => {
