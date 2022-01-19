@@ -1,14 +1,12 @@
-import { OrbitControls, Stats } from "@react-three/drei";
+import { Loader, OrbitControls, Stats } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useEffect, useRef } from "react";
-import { Mesh } from "three";
-import { Cube } from "./components";
+import { HouseScene } from "./components/home/Scene";
 
 import { initDevtools } from "./utils";
 
 function App() {
   const containerRef = useRef<HTMLDivElement>(null!);
-  const meshRef = useRef<Mesh>(null!);
 
   useEffect(() => {
     const listener = () => {
@@ -26,24 +24,28 @@ function App() {
   }, []);
 
   return (
-    <Suspense fallback={null}>
-      <div ref={containerRef} className="container">
-        <Canvas
-          camera={{ fov: 75, position: [0, 0, 3] }}
-          onCreated={(state) => {
-            initDevtools(state.scene, state.gl);
-          }}
-          dpr={window.devicePixelRatio}
-        >
-          <OrbitControls />
-          <Cube />
-          <color attach="background" args={["black"]} />
-          <Stats />
-
-          {/* <axesHelper args={[3]} /> */}
-        </Canvas>
-      </div>
-    </Suspense>
+    <div ref={containerRef} className="container">
+      <Canvas
+        gl={{ antialias: false }}
+        camera={{ fov: 75, position: [0, 0, 3] }}
+        onCreated={(state) => {
+          initDevtools(state.scene, state.gl);
+        }}
+        dpr={window.devicePixelRatio}
+        linear
+        flat
+        shadows
+      >
+        <OrbitControls />
+        <Suspense fallback={null}>
+          <HouseScene />
+        </Suspense>
+        <color attach="background" args={[0x262837]} />
+        <Stats />
+        {/* <axesHelper args={[3]} /> */}
+      </Canvas>
+      <Loader />
+    </div>
   );
 }
 
