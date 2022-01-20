@@ -1,33 +1,15 @@
 import { OrbitControls, Stats } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
-import { HouseScene } from "./components/home/Scene";
+import { Scene } from "./components";
 
 import { initDevtools } from "./utils";
 
 function App() {
-  const containerRef = useRef<HTMLDivElement>(null!);
-
-  useEffect(() => {
-    const listener = () => {
-      // if (!document.fullscreenElement) {
-      //   containerRef.current.querySelector("canvas")?.requestFullscreen();
-      // } else {
-      //   document.exitFullscreen();
-      // }
-    };
-
-    window.addEventListener("dblclick", listener);
-    return () => {
-      window.removeEventListener("dblclick", listener);
-    };
-  }, []);
-
   return (
-    <div ref={containerRef} className="container">
+    <div className="container">
       <Canvas
         gl={{ antialias: false }}
-        camera={{ fov: 75, position: [0, 0, 3] }}
+        camera={{ fov: 75, position: [0, 0, 3], near: 0.01, far: 10000 }}
         onCreated={(state) => {
           initDevtools(state.scene, state.gl);
         }}
@@ -37,7 +19,7 @@ function App() {
         shadows
       >
         <OrbitControls />
-        <HouseScene />
+        <Scene />
         <Stats />
         {/* <axesHelper args={[3]} /> */}
       </Canvas>
